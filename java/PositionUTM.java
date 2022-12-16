@@ -186,9 +186,8 @@ public class PositionUTM {
 	 */
 	public static Position toLatLon(double easting, double northing, int zoneNumber, char zoneLetter) {
 		
-		// TODO N0 !!!
-		double what = zoneLetter <= 'M' ? N0 : 0.0;
-		double e = (northing - what) / (k0 * A);
+		double equatorialOffset = zoneLetter <= 'M' ? N0 : 0.0;
+		double e = (northing - equatorialOffset) / (k0 * A);
 		double ny  = (easting - E0) / (k0 * A);
 		
 		double sume = 0.0;
