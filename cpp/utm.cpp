@@ -4,6 +4,9 @@
 #include <stdexcept>
 #include <stdint.h>
 
+namespace utm
+{
+
 static char ZONE_LETTERS[] = "CDEFGHJKLMNPQRSTUVWXX";
 
 // Flattening
@@ -61,6 +64,12 @@ static uint8_t toCentralLongitude(uint8_t zoneNumber)
 	return (zoneNumber - 1.0) * 6.0 - 180.0 + 3.0;
 }
 
+void convertToUTM(const utm::Position& position, utm::PositionUTM& utm)
+{
+	convertToUTM(position.latitude, position.longitude,
+				 utm.easting, utm.northing, utm.zoneNumber, utm.zoneLetter);
+}
+
 void convertToUTM(const double& latitudeDegrees, const double& longitudeDegrees, double& easting, double& northing, uint8_t& zoneNumber, char& zoneLetter)
 {
 	zoneNumber = toZoneNumber(longitudeDegrees);
@@ -89,7 +98,11 @@ void convertToUTM(const double& latitudeDegrees, const double& longitudeDegrees,
 	if(latitude < 0.0) northing += N0;
 }
 
-
+void convertToLatLon(const utm::PositionUTM& utm, utm::Position& position)
+{
+	convertToLatLon(utm.easting, utm.northing, utm.zoneNumber, utm.zoneLetter,
+					position.latitude, position.longitude);
+}
 
 void convertToLatLon(const double& easting, const double& northing, const uint8_t& zoneNumber, const char& zoneLetter, double& latitude, double& longitude)
 {
@@ -124,3 +137,5 @@ void convertToLatLon(const double& easting, const double& northing, const uint8_
 	latitude = toDegrees(latitude);
 	longitude = toDegrees(longitude);
 }
+
+}	// end namespace utm
